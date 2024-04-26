@@ -7,11 +7,17 @@ import passport from "passport";
 // local register route
 export const localRegisterUser = AsyncHandler(async (req, res)=>{
     const {username, email, fullname, password} = req.body;
-    if(!(username && email && fullname && password)) return res.redirect("/register");
+    if(!(username && email && fullname && password)){
+      req.flash("registerError", "All fields are required");
+      return res.redirect("/register");
+    };
     const exist = await User.findOne({
       $or:[{username}, {email}]
     });
-    if(exist) return res.redirect("/register");
+    if(exist){ 
+      req.flash("registerError", "Username and Email already taken")
+      return res.redirect("/register");
+    };
     const userData = new User({
       username, email, fullname
     });
@@ -26,7 +32,8 @@ export const localRegisterUser = AsyncHandler(async (req, res)=>{
 // local login route
 export const localLoginUser = AsyncHandler(passport.authenticate("local", {
     successRedirect:"/profile",
-    failureRedirect:"/"
+    failureRedirect:"/",
+    failureFlash:true,
   }), (req, res)=>{
 });
 

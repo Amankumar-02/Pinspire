@@ -2,7 +2,7 @@
 <html>
   <head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/indexStyle.css' />
+    <link rel='stylesheet' href='../stylesheets/style.css' />
   </head>
   <body>
     <div class="container">
@@ -10,6 +10,7 @@
         <!--pinterest logo-->
         <img src="https://i.pinimg.com/originals/d3/d1/75/d3d175e560ae133f1ed5cd4ec173751a.png" alt="pin logo" class="img1" />
         <p class="header">Log In to see more</p>
+        <p class="errorText"> <%= loginErrorFlash %> </p>
         <form action="/usersLogin" method="post">
           <input type="text" placeholder="User Name" class="detail" name="username"/><br />
           <input type="password" placeholder="Password" class="detail" name="password"/>

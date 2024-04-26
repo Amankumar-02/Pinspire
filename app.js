@@ -3,6 +3,7 @@ import express from 'express';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import flash from 'connect-flash';
 // import flash from 'connect-flash';
 import passport from 'passport';
 import { initializingPassport } from './passportConfig.js';
@@ -14,6 +15,7 @@ export const port = process.env.PORT || 3000;
 
 // view engine setup
 app.set('view engine', 'ejs');
+app.use(flash());
 app.use(session({
   resave: false,
   saveUninitialized: false,

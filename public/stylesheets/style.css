@@ -129,7 +129,7 @@ hr {
   margin-left: 25%;
 }
 .footer{
-  padding-bottom: 10px;
+  padding-bottom: 30px;
 }
 .footer a{
   text-decoration: none;
@@ -138,4 +138,7 @@ hr {
 }
 .footer a:hover{
   text-decoration: underline;
+}
+.errorText{
+  color: red;
 }

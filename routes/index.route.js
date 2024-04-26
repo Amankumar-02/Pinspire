@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import { localRegisterUser, localLoginUser, localLogoutUser } from '../controllers/passportLocalUser.controller.js';
-import { indexLogin, indexRegister, indexProfile } from '../controllers/index.controller.js';
+import { indexLogin, indexRegister, indexProfile, indexFeed } from '../controllers/index.controller.js';
+import {uploadPost} from '../controllers/posts.controller.js';
 import { isLoggedIn, isLoggedOut } from '../passportConfig.js';
+import {upload} from '../middlewares/multer.middlerware.js';
 // import {createUser, allUserPost} from '../controllers/users.controller.js';
 // import {createPost} from '../controllers/posts.controller.js';
 
@@ -13,6 +15,8 @@ indexRouter.get('/', isLoggedOut, indexLogin);
 indexRouter.get('/register', isLoggedOut, indexRegister);
 // profile dashboard
 indexRouter.get("/profile", isLoggedIn, indexProfile)
+indexRouter.get("/feed", isLoggedIn, indexFeed);
+indexRouter.post("/upload", isLoggedIn, upload.single('file'), uploadPost);
 
 
 
