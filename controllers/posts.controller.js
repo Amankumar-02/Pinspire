@@ -3,6 +3,7 @@ import { User } from '../models/users.model.js';
 import {AsyncHandler} from '../utils/AsyncHandler.js';
 import {ApiResponse} from '../utils/ApiResponse.js';
 import {ApiError} from '../utils/ApiError.js';
+import fs from 'fs';
 
 // upload post
 export const uploadPost = AsyncHandler(async(req, res)=>{
@@ -14,11 +15,16 @@ export const uploadPost = AsyncHandler(async(req, res)=>{
     const exist = await Post.findOne({postText: req.body.postText});
     // if(exist) return res.status(404).json(new ApiError(404, "Post caption is already taken"));
     if(exist){
+        fs.unlink(`./public/images/uploads/${req.file.filename}`, (err)=>{
+            if(err) console.error(err);
+            console.log("Failed post image removed")
+        });
         req.flash("postUploadError", "Post caption is already taken");
-        return res.redirect('/profile');
+        return res.redirect('/addpost');
     }
     const newPost = await Post.create({ 
         postText: req.body.postText,
+        description: req.body.description,
         image: req.file.filename,
         user:user._id,
     });

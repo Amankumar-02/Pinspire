@@ -14,12 +14,20 @@
 </head>
 
 <body>
+  <div class="nav-bar w-100 px-5 py-2 d-flex justify-content-between align-items-center ">
+    <h3>Pinterest</h3>
+    <div>
+      <a href="/profile" class="button bg-info">Profile</a>
+      <a href="/feed" class="button bg-info">Feeds</a>
+      <a href="/userlogout" class="button">Logout</a>
+    </div>
+  </div>
   <div class="container">
     <% include ./userDets.ejs %>
       <div class="container">
         <div class="d-flex justify-content-evenly">
-          <a href="/profile" class="text-black text-decoration-none mb-2 fw-bold">Posts</a>
-          <a href="/savePins" class="text-black text-decoration-none mb-2">Pins Saves</a>
+          <a href="/profile" class="text-white  text-decoration-none mb-2 fw-bold">Posts</a>
+          <a href="/savePins" class="text-white  text-decoration-none mb-2">Pins Saves</a>
         </div>
         <div class="cards d-flex flex-wrap align-items-start gap-2">
           <% userDets.posts.forEach(post=>{ %>
@@ -29,6 +37,7 @@
                 <h5 class="card-title">
                   <%= post.postText %>
                 </h5>
+                <p class="opacity-75 mb-0"><%= post.description %></p>
               </div>
             </div>
             <% }) %>

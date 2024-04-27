@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { localRegisterUser, localLoginUser, localLogoutUser } from '../controllers/passportLocalUser.controller.js';
-import { indexLogin, indexRegister, indexProfile, indexSavedPins, indexFeed } from '../controllers/index.controller.js';
+import { indexLogin, indexRegister, indexProfile, indexSavedPins, indexFeed, indexAddPost, indexShowSavedPin } from '../controllers/index.controller.js';
 import {updateProfileImage} from '../controllers/users.controller.js';
 import {uploadPost} from '../controllers/posts.controller.js';
 import { isLoggedIn, isLoggedOut } from '../passportConfig.js';
@@ -16,7 +16,8 @@ indexRouter.get('/register', isLoggedOut, indexRegister);
 indexRouter.get("/profile", isLoggedIn, indexProfile)
 indexRouter.get("/savePins", isLoggedIn, indexSavedPins)
 indexRouter.get("/feed", isLoggedIn, indexFeed);
-indexRouter.post("/upload", isLoggedIn, upload.single('file'), uploadPost);
+indexRouter.get("/addpost", isLoggedIn, indexAddPost);
+indexRouter.get("/show/savedpin", isLoggedIn, indexShowSavedPin);
 
 
 
@@ -27,8 +28,19 @@ indexRouter.post("/usersLogin", localLoginUser);
 // local logout route
 indexRouter.get("/userlogout", localLogoutUser);
 
+
+
 // user update profile image // user controller
 indexRouter.post("/updateProfileImg", isLoggedIn, upload2.single('profileImg'), updateProfileImage);
+
+
+
+// post controller
+indexRouter.post("/upload", isLoggedIn, upload.single('file'), uploadPost);
+
+
+
+
 
 
 
