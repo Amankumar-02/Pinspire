@@ -19,7 +19,7 @@ export const localRegisterUser = AsyncHandler(async (req, res)=>{
       return res.redirect("/register");
     };
     const userData = new User({
-      username, email, fullname
+      username, email, fullname, dp:"defaultImg.png",
     });
     User.register(userData, req.body.password)
     .then(()=>{

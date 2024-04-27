@@ -1,11 +1,10 @@
 import { Router } from 'express';
 import { localRegisterUser, localLoginUser, localLogoutUser } from '../controllers/passportLocalUser.controller.js';
-import { indexLogin, indexRegister, indexProfile, indexFeed } from '../controllers/index.controller.js';
+import { indexLogin, indexRegister, indexProfile, indexSavedPins, indexFeed } from '../controllers/index.controller.js';
+import {updateProfileImage} from '../controllers/users.controller.js';
 import {uploadPost} from '../controllers/posts.controller.js';
 import { isLoggedIn, isLoggedOut } from '../passportConfig.js';
-import {upload} from '../middlewares/multer.middlerware.js';
-// import {createUser, allUserPost} from '../controllers/users.controller.js';
-// import {createPost} from '../controllers/posts.controller.js';
+import {upload, upload2} from '../middlewares/multer.middlerware.js';
 
 export const indexRouter = Router();
 
@@ -15,6 +14,7 @@ indexRouter.get('/', isLoggedOut, indexLogin);
 indexRouter.get('/register', isLoggedOut, indexRegister);
 // profile dashboard
 indexRouter.get("/profile", isLoggedIn, indexProfile)
+indexRouter.get("/savePins", isLoggedIn, indexSavedPins)
 indexRouter.get("/feed", isLoggedIn, indexFeed);
 indexRouter.post("/upload", isLoggedIn, upload.single('file'), uploadPost);
 
@@ -26,6 +26,9 @@ indexRouter.post("/usersRegister", localRegisterUser);
 indexRouter.post("/usersLogin", localLoginUser);
 // local logout route
 indexRouter.get("/userlogout", localLogoutUser);
+
+// user update profile image // user controller
+indexRouter.post("/updateProfileImg", isLoggedIn, upload2.single('profileImg'), updateProfileImage);
 
 
 

@@ -22,7 +22,18 @@ export const indexProfile = AsyncHandler( async(req, res)=>{
     const userDets = await User.findOne({
         username: req.session.passport.user
     }).populate("posts");
-    res.render("profile", { title: 'Pinterest Profile', userDets: userDets || "" })
+    const [postUploadError] = req.flash("postUploadError")
+    res.render("profile", { title: 'Pinterest Profile', userDets: userDets || "", postUploadError: postUploadError || "" })
+});
+
+// profile dashboard
+export const indexSavedPins = AsyncHandler( async(req, res)=>{
+    // the below is syntax to get authenticated username from session.
+    // console.log(req.session.passport.user)
+    const userDets = await User.findOne({
+        username: req.session.passport.user
+    }).populate("posts");
+    res.render("savePins", { title: 'Pinterest Profile', userDets: userDets || "", postUploadError: "" })
 });
 
 // feed dashboard

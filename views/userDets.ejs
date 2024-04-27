@@ -1,0 +1,34 @@
+<div class="containerpre">
+    <div class="cardpre">
+      <div class="profile-picture position-relative">
+        <span id="uploadIcon" class="w-25 h-25 position-absolute bottom-0 end-0 rounded-5 d-flex align-items-center justify-content-center">
+          <i class="text-black  ri-pencil-fill"></i>
+        </span>
+        <img
+          src="/images/dp/<%= userDets.dp%>"
+          alt="Profile Picture">
+        </div>
+        <form id="uploadForm" class="visually-hidden " action="/updateProfileImg" method="post" enctype="multipart/form-data">
+          <input type="file" name="profileImg" required>
+          <button type="submit">Update Dp</button>
+        </form>
+      <h2 class="name">
+        <%= userDets.fullname %>
+      </h2>
+      <h3 class="username">@<%= userDets.username %>
+      </h3>
+      <!-- <p class="tagline">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p> -->
+      <!-- <p class="description">Some Desccription Lorem ipsum dolor sit amet, consectetur adipisicing.</p> -->
+      <a href="/userlogout" class="button">Logout</a>
+      <a href="/feed" class="button">Visit Feeds</a>
+      <div class="my-2">
+        <p class="text-danger "><%= postUploadError %></p>  
+        <form action="/upload" method="post" enctype="multipart/form-data">
+          <label for="postCap">Post Caption</label>
+          <input type="text" id="postCap" name="postText" required><br>
+          <input type="file" name="file" required><br>
+          <button type="submit">Upload</button>
+        </form>
+      </div>
+    </div>
+  </div>

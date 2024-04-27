@@ -12,7 +12,11 @@ export const uploadPost = AsyncHandler(async(req, res)=>{
         username: req.session.passport.user
     });
     const exist = await Post.findOne({postText: req.body.postText});
-    if(exist) return res.status(404).json(new ApiError(404, "Post caption is already taken"));
+    // if(exist) return res.status(404).json(new ApiError(404, "Post caption is already taken"));
+    if(exist){
+        req.flash("postUploadError", "Post caption is already taken");
+        return res.redirect('/profile');
+    }
     const newPost = await Post.create({ 
         postText: req.body.postText,
         image: req.file.filename,

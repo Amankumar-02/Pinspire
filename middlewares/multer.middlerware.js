@@ -14,3 +14,14 @@ const storage = multer.diskStorage({
   })
   
 export const upload = multer({ storage: storage });
+
+const storage2 = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/images/dp')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Math.floor(Math.random()*100) + file.originalname)
+  }
+})
+
+export const upload2 = multer({ storage: storage2 });
