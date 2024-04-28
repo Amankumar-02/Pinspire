@@ -33,6 +33,13 @@
         <h4 class="text-white fw-bold opacity-50 ">Create a new Post</h4>
         <p class="text-danger "><%= postUploadError %></p>  
         <form action="/upload" method="post" class="w-100 d-flex flex-column gap-2" enctype="multipart/form-data">
+            <!-- <input type="text" class="inputBox" name="postText" placeholder="" required> -->
+            <input type="text" class="inputBox" list="existPins" name="pinTitle" placeholder="Choose Pin"/>
+              <datalist id="existPins">
+                <% pinDets.forEach(pin=>{ %>
+                  <option><%= pin.userPinTitle %></option>
+                <% }) %>
+              </datalist>
             <input type="text" class="inputBox" name="postText" placeholder="Post Caption" required>
             <textarea type="text" class="inputBox" name="description" placeholder="Description" required></textarea>
             <input type="file" class="inputBox text-white" name="file" required>

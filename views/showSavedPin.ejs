@@ -7,36 +7,120 @@
   <title>
     <%= title %>
   </title>
-  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
-  <link rel="stylesheet" href="../stylesheets/profileStyle.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+  <!-- <link rel="stylesheet" href="../stylesheets/profileStyle.css"> -->
+  <style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #262626;
+    margin: 0;
+    padding: 0;
+  }
+  .nav-bar {
+    background-color: #262626;
+    color: white;
+  }
+  
+  .containerpre {
+    /* max-width: 500px; */
+    max-width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .cardpre {
+    background-color: #515455;
+    border-radius: 50px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-picture {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+  }
+  .profile-picture span{
+    background-color: #d9d9d9;
+  }
+  
+  .profile-picture img {
+    border-radius: 50%;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .name {
+    font-size: 24px;
+    margin: 0;
+    color: white;
+  }
+  
+  .username {
+    font-size: 18px;
+    color: white;
+    margin: 10px 0;
+  }
+  
+  .tagline,
+  .description {
+    color: #555;
+    margin: 10px 0;
+  }
+  
+  .button {
+    width: fit-content;
+    margin: auto;
+    margin-bottom: 2px;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f30d19;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .button:hover {
+    background-color: #df0812;
+  }
+  
+  </style>
 </head>
 
 <body>
-    <div class="nav-bar w-full px-[3rem] py-[0.5rem] flex justify-between items-center">
-        <h3 class="text-[1.75rem] mb-[0.5rem]">Pinterest</h3>
-        <div>
-          <a href="/profile" class="button bg-[#0DCAF0]">Profile</a>
-          <a href="/feed" class="button bg-[#0DCAF0]">Feeds</a>
-          <a href="/userlogout" class="button">Logout</a>
-        </div>
+    <div class="nav-bar w-100 px-5 py-2 d-flex justify-content-between align-items-center ">
+      <h3>Pinterest</h3>
+      <div>
+        <a href="/profile" class="button bg-info">Profile</a>
+        <a href="/feed" class="button bg-info">Feeds</a>
+        <a href="/userlogout" class="button">Logout</a>
+      </div>
     </div>
-    <div class="w-full min-h-screen bg-[#515455] px-10 py-8">
-        <div class="cards flex flex-wrap gap-10 text-white">
-            <% userDets.posts.forEach(post=>{ %>
-            <div class="card w-32">
-                <div class="w-32 h-40 bg-sky-200 rounded-lg">
-                    <img src="/images/uploads/<%= post.image %>" class="w-full h-full object-cover" alt="">
-                </div>
-                <h5 class="mt-2"><%= post.postText %></h5>
-            </div>
-            <% }) %>
+    <div class="container my-3">
+      <h4 class="text-center text-white py-3">Posts Inside Pin</h4>
+      <div class="cards d-flex flex-wrap gap-2">
+        <% userPostsFromPin.userPostPin.forEach(post=>{ %>
+        <div class="card" style="width: 16.6rem;">
+          <img src="/images/uploads/<%= post.image %>" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= post.postText %>
+            </h5>
+            <p class="opacity-75 mb-0"><%= post.description %></p>
+          </div>
         </div>
+        <% }) %>
+      </div>
     </div>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script> -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    crossorigin="anonymous"></script>
 </body>
 
 </html>

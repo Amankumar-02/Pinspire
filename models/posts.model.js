@@ -17,6 +17,10 @@ const postsSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:"User"
     },
+    pin:{
+        type:Schema.Types.ObjectId,
+        ref: 'UserPin',
+    },
     likes:[{
         type:Number,
         default:0,

@@ -3,6 +3,7 @@ import { ApiResponse } from '../utils/ApiResponse.js';
 import { ApiError } from '../utils/ApiError.js';
 import {User} from '../models/users.model.js';
 import {Post} from '../models/posts.model.js';
+import { UserPin } from '../models/userPin.model.js';
 
 // login dashboard
 export const indexLogin = AsyncHandler((req, res)=>{
@@ -22,7 +23,7 @@ export const indexProfile = AsyncHandler( async(req, res)=>{
     // console.log(req.session.passport.user)
     const userDets = await User.findOne({
         username: req.session.passport.user
-    }).populate("posts");
+    }).populate("pins");
     res.render("profile", { title: 'Pinterest Profile', userDets: userDets || ""})
 });
 
@@ -43,15 +44,25 @@ export const indexFeed = AsyncHandler( async(req, res)=>{
 });
 
 // addPost dashboard
-export const indexAddPost = AsyncHandler( (req, res)=>{
-    const [postUploadError] = req.flash("postUploadError")
-    res.render("addPost", {title: 'Pinterest AddPost', postUploadError: postUploadError || "" })
+export const indexAddPost = AsyncHandler( async(req, res)=>{
+    const [postUploadError] = req.flash("postUploadError");
+    const existingPins = await User.findOne({
+        username: req.session.passport.user
+    }).populate("pins");
+    res.render("addPost", {title: 'Pinterest AddPost', postUploadError: postUploadError || "", pinDets: existingPins.pins || "" })
 })
 
 // show saved pins dashboard
 export const indexShowSavedPin = AsyncHandler(async(req, res)=>{
+    const urlPinTitle = req.params.pinTitle;
+    // const userDets = await User.findOne({
+    //     username: req.session.passport.user
+    // }).populate("posts");
     const userDets = await User.findOne({
         username: req.session.passport.user
-    }).populate("posts");
-    res.render("showSavedPin", { title: 'Show Pins', userDets: userDets || ""})
+    })
+    const userPostsFromPin = await UserPin.findOne({
+        $and:[{userPinTitle: urlPinTitle}, {userPin: userDets._id}]
+    }).populate("userPostPin");
+    res.render("showSavedPin", { title: 'Show Pins', userPostsFromPin: userPostsFromPin || ""})
 });

@@ -29,15 +29,17 @@
           <a href="/profile" class="text-white  text-decoration-none mb-2 fw-bold">Posts</a>
           <a href="/savePins" class="text-white  text-decoration-none mb-2">Pins Saves</a>
         </div>
-        <div class="cards d-flex flex-wrap align-items-start gap-2">
-          <% userDets.posts.forEach(post=>{ %>
+        <div class="cards d-flex flex-wrap gap-2">
+          <% userDets.pins.forEach(pin=>{ %>
             <div class="card" style="width: 16.6rem;">
-              <img src="/images/uploads/<%= post.image %>" class="card-img-top" alt="...">
+              <a href="/show/savedpin/<%= pin.userPinTitle %>">
+              <img src="/images/uploads/<%= pin.pinCover %>" class="card-img-top" alt="...">
+            </a>
               <div class="card-body">
                 <h5 class="card-title">
-                  <%= post.postText %>
+                  <%= pin.userPinTitle %>
                 </h5>
-                <p class="opacity-75 mb-0"><%= post.description %></p>
+                <p class="opacity-75 mb-0"><%= pin.userPostPin.length %></p>
               </div>
             </div>
             <% }) %>

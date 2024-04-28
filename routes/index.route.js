@@ -17,7 +17,7 @@ indexRouter.get("/profile", isLoggedIn, indexProfile)
 indexRouter.get("/savePins", isLoggedIn, indexSavedPins)
 indexRouter.get("/feed", isLoggedIn, indexFeed);
 indexRouter.get("/addpost", isLoggedIn, indexAddPost);
-indexRouter.get("/show/savedpin", isLoggedIn, indexShowSavedPin);
+indexRouter.get("/show/savedpin/:pinTitle", isLoggedIn, indexShowSavedPin);
 
 
 

@@ -24,6 +24,10 @@ const usersSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref: 'Post',
     }],
+    pins:[{
+        type:Schema.Types.ObjectId,
+        ref: 'UserPin',
+    }],
     dp:{
         type:String,
     },

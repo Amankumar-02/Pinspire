@@ -16,6 +16,7 @@ export const createUser = AsyncHandler(async(req, res)=>{
             fullname:"Aman Kumar",
             password:"1234",
             posts:[],
+            pins:[],
         });
         return res.status(200).json(new ApiResponse(200, newUser, "New User Created"));
     }else{
