@@ -28,6 +28,10 @@ const usersSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref: 'UserPin',
     }],
+    savedPin:[{
+        type:Schema.Types.ObjectId,
+        ref: 'UserSavedPin',
+    }],
     dp:{
         type:String,
     },

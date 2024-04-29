@@ -22,7 +22,7 @@
     <div class="containerFeed">
         <% allPosts.forEach(post=>{ %>
             <div class="boxFeed">
-                <a href="#">
+                <a href="/show/postinfo/<%= post._id %>">
                     <img src="/images/uploads/<%= post.image %>" alt="image"></a>
                 <div class="caption"><%= post.postText %></div>
                 <div class="caption opacity-50 lh-1"><%= post.description %></div>

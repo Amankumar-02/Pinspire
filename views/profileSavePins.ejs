@@ -27,21 +27,20 @@
             <div class="container">
                 <div class="d-flex justify-content-evenly">
                     <a href="/profile" class="text-white  text-decoration-none mb-2">Posts</a>
-                    <a href="/savePins" class="text-white  text-decoration-none mb-2 fw-bold">Pins Saves</a>
+                    <a href="/savePins" class="text-white  text-decoration-none mb-2 fw-bold">Saved Pins</a>
                 </div>
-                <!-- <div class="text-center text-white ">
-                    <h2>Noting Saved Yet!</h2>
-                </div> -->
                 <div class="cards d-flex flex-wrap gap-2">
-                    <a href="/show/savedpin">
-                        <div class="card" style="width: 16.6rem; height:200px">
-                            <img src="https://media.istockphoto.com/id/183821822/photo/say.jpg?s=612x612&w=0&k=20&c=kRmCjTzA9cq4amgRgeHkZsZuvxezUtC8wdDYfKg-mho=" class="card-img-top overflow-hidden " alt="...">
-                            <div class="card-body py-1 ">
-                                <h5 class="card-title mb-0 fw-bold text-decoration-none ">Title</h5>
-                                <p class="mb-0 text-decoration-none ">Pins 5</p>
+                    <% userDets.savedPin.forEach(pin=>{ %>
+                        <div class="card" style="width: 16.6rem">
+                            <a href="/show/savedpin/<%= pin.userSavedPinTitle %>">
+                            <img src="/images/uploads/<%= pin.savedPinCover %>" class="card-img-top" alt="...">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title"><%= pin.userSavedPinTitle %></h5>
+                                <p class="opacity-75 mb-0"><%= pin.userSavedPostPin.length %></p>
                             </div>
                         </div>
-                    </a>
+                    <% }) %>
                 </div>
             </div>
     </div>

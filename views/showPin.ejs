@@ -105,7 +105,7 @@
     <div class="container my-3">
       <h4 class="text-center text-white py-3">Posts Inside Pin</h4>
       <div class="cards d-flex flex-wrap gap-2">
-        <% userPostsFromPin.userSavedPostPin.forEach(post=>{ %>
+        <% userPostsFromPin.userPostPin.forEach((post, index)=>{ %>
         <div class="card" style="width: 16.6rem;">
           <a href="/show/postinfo/<%= post._id %>">
             <img src="/images/uploads/<%= post.image %>" class="card-img-top" alt="...">

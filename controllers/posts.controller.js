@@ -1,6 +1,7 @@
 import { Post } from '../models/posts.model.js';
 import { User } from '../models/users.model.js';
 import { UserPin } from '../models/userPin.model.js';
+import { UserSavedPin } from '../models/userSavedpin.model.js';
 import {AsyncHandler} from '../utils/AsyncHandler.js';
 import {ApiResponse} from '../utils/ApiResponse.js';
 import {ApiError} from '../utils/ApiError.js';
@@ -75,4 +76,51 @@ export const uploadPost = AsyncHandler(async(req, res)=>{
     // await userFetch.save({validateBeforeSave:false});
 
     // return res.status(200).json(new ApiResponse(200, newPost, "Post is uploaded successfully"))
+});
+
+// savedPostPin
+export const savedPostPin = AsyncHandler(async(req, res)=>{
+    const savePostId = req.params.savePostId;
+    const post = await Post.findById(savePostId);
+    const user = await User.findOne({
+        username: req.session.passport.user
+    });
+    const savedPinExist = await UserSavedPin.findOne({
+        $and:[{userSavedPinTitle: req.body.savedPinTitle}, {userSavedPin: user._id}]
+    });
+    let newPin;
+    if(savedPinExist){
+        newPin = await UserSavedPin.findOneAndUpdate({
+            $and: [{userSavedPin: user._id}, {userSavedPinTitle: req.body.savedPinTitle}]
+        }, 
+        {
+            $addToSet:{
+                userSavedPostPin: post._id
+                }
+        }, {
+            new: true,
+        });
+    }else{
+        newPin = await UserSavedPin.create({
+            userSavedPinTitle: req.body.savedPinTitle,
+            savedPinCover: post.image,
+            userSavedPin: user._id,
+            userSavedPostPin: [post._id],
+        })
+    }
+    
+    //Method 1 to update and save
+    await User.findByIdAndUpdate(newPin.userSavedPin, {
+        $addToSet: {savedPin:newPin._id}
+        },{
+        new: true,
+        },
+    );
+    // await Post.findByIdAndUpdate(newPost._id, {
+    //     $set:{
+    //         pin: newPin._id
+    //     }
+    // }, {new:true})
+    req.flash("savePostAlert", "Post is saved successfully");
+    return res.redirect(`/show/postinfo/${post._id}`);
 });

@@ -5,6 +5,9 @@ const userSavedPinSchema = new Schema({
         type:String,
         required:true,
     },
+    savedPinCover: {
+        type:String,
+    },
     userSavedPin: {
         type:Schema.Types.ObjectId,
         ref:"User"

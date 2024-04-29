@@ -27,12 +27,12 @@
       <div class="container">
         <div class="d-flex justify-content-evenly">
           <a href="/profile" class="text-white  text-decoration-none mb-2 fw-bold">Posts</a>
-          <a href="/savePins" class="text-white  text-decoration-none mb-2">Pins Saves</a>
+          <a href="/savePins" class="text-white  text-decoration-none mb-2">Saved Pins</a>
         </div>
         <div class="cards d-flex flex-wrap gap-2">
           <% userDets.pins.forEach(pin=>{ %>
             <div class="card" style="width: 16.6rem;">
-              <a href="/show/savedpin/<%= pin.userPinTitle %>">
+              <a href="/show/pin/<%= pin.userPinTitle %>">
               <img src="/images/uploads/<%= pin.pinCover %>" class="card-img-top" alt="...">
             </a>
               <div class="card-body">
