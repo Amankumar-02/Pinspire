@@ -12,7 +12,9 @@ export const uploadPost = AsyncHandler(async(req, res)=>{
     const uploadFile = req.file; 
     if(!uploadFile) return res.status(404).json(new ApiError(404, "No file were upload"));
     const user = await User.findOne({
-        username: req.session.passport.user
+        // username: req.session.passport.user
+        username: req.user.username || req.user.displayName.replaceAll(" ","")
+        
     });
     const exist = await Post.findOne({postText: req.body.postText});
     // if(exist) return res.status(404).json(new ApiError(404, "Post caption is already taken"));
@@ -83,7 +85,8 @@ export const savedPostPin = AsyncHandler(async(req, res)=>{
     const savePostId = req.params.savePostId;
     const post = await Post.findById(savePostId);
     const user = await User.findOne({
-        username: req.session.passport.user
+        // username: req.session.passport.user
+        username: req.user.username || req.user.displayName.replaceAll(" ","")
     });
     const savedPinExist = await UserSavedPin.findOne({
         $and:[{userSavedPinTitle: req.body.savedPinTitle}, {userSavedPin: user._id}]

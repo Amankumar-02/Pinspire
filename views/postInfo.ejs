@@ -145,7 +145,7 @@
     crossorigin="anonymous"></script>
     <script>
       let saveButton = document.getElementById('saveButton');
-      if(saveButton.value === "Save"){
+      if(saveButton.innerText === "Save"){
         document.getElementById('saveButton').addEventListener('click', function() {
           document.getElementById('saveButton').style.display = 'none';
           document.getElementById('saveForm').style.display = 'block';

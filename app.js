@@ -9,6 +9,7 @@ import passport from 'passport';
 import { initializingPassport } from './passportConfig.js';
 
 import {indexRouter} from './routes/index.route.js';
+import { oAuthRouter } from './routes/oAuth.route.js';
 
 export const app = express();
 export const port = process.env.PORT || 3000;
@@ -35,6 +36,7 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 app.use('/', indexRouter);
+app.use('/auth', oAuthRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -5,7 +5,7 @@
           <i class="text-black  ri-pencil-fill"></i>
         </span>
         <img
-          src="/images/dp/<%= userDets.dp%>"
+          src="<%= imgFormat ? '/images/dp/' + userDets.dp : userDets.dp %>"
           alt="Profile Picture">
         </div>
         <form id="uploadForm" class="visually-hidden" action="/updateProfileImg" method="post" enctype="multipart/form-data">

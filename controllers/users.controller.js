@@ -33,12 +33,18 @@ export const allUserPost = AsyncHandler(async(req, res)=>{
 export const updateProfileImage = AsyncHandler(async(req, res)=>{
     const profileImg = req.file;
     if(!profileImg) return res.status(404).json(new ApiError(404, "No file were upload"));
-    const user = await User.findOne({ username: req.session.passport.user });
+    const user = await User.findOne({ 
+        // username: req.session.passport.user 
+        username: req.user.username || req.user.displayName.replaceAll(" ","")
+    });
     if (!user) return res.status(404).json(new ApiError(404, "User not found"));
 
     const oldProfileImg = user.dp;
 
-    await User.findOneAndUpdate({username: req.session.passport.user}, {
+    await User.findOneAndUpdate({
+        // username: req.session.passport.user
+        username: req.user.username || req.user.displayName.replaceAll(" ","")
+    }, {
         $set:{
             dp: profileImg.filename
         },

@@ -23,17 +23,24 @@ export const indexProfile = AsyncHandler( async(req, res)=>{
     // the below is syntax to get authenticated username from session.
     // console.log(req.session.passport.user)
     const userDets = await User.findOne({
-        username: req.session.passport.user
+        username: req.user.username || req.user.displayName.replaceAll(" ","")
     }).populate("pins");
-    res.render("profile", { title: 'Pinterest Profile', userDets: userDets || ""})
+    if(userDets.dp.includes("http")){
+        res.render("profile", { title: 'Pinterest Profile', userDets: userDets || "", imgFormat: false})
+    }
+    res.render("profile", { title: 'Pinterest Profile', userDets: userDets || "", imgFormat: true})
 });
 
 // profile dashboard
 export const indexSavedPins = AsyncHandler( async(req, res)=>{
     const userSavedDets = await User.findOne({
-        username: req.session.passport.user
+        // username: req.session.passport.user
+        username: req.user.username || req.user.displayName.replaceAll(" ","")
     }).populate("savedPin");
-    res.render("profileSavePins", { title: 'Pinterest Profile', userDets: userSavedDets || ""})
+    if(userSavedDets.dp.includes("http")){
+        res.render("profileSavePins", { title: 'Pinterest Profile', userDets: userSavedDets || "", imgFormat: false})
+    }
+    res.render("profileSavePins", { title: 'Pinterest Profile', userDets: userSavedDets || "", imgFormat: true})
 });
 
 // feed dashboard
@@ -46,7 +53,8 @@ export const indexFeed = AsyncHandler( async(req, res)=>{
 export const indexAddPost = AsyncHandler( async(req, res)=>{
     const [postUploadError] = req.flash("postUploadError");
     const existingPins = await User.findOne({
-        username: req.session.passport.user
+        // username: req.session.passport.user
+        username: req.user.username || req.user.displayName.replaceAll(" ","")
     }).populate("pins");
     res.render("addPost", {title: 'Pinterest AddPost', postUploadError: postUploadError || "", pinDets: existingPins.pins || "" })
 })
@@ -55,7 +63,8 @@ export const indexAddPost = AsyncHandler( async(req, res)=>{
 export const indexShowPin = AsyncHandler(async(req, res)=>{
     const urlPinTitle = req.params.pinTitle;
     const user = await User.findOne({
-        username: req.session.passport.user
+        // username: req.session.passport.user
+        username: req.user.username || req.user.displayName.replaceAll(" ","")
     })
     const userPostsFromPin = await UserPin.findOne({
         $and:[{userPinTitle: urlPinTitle}, {userPin: user._id}]
@@ -66,7 +75,8 @@ export const indexShowPin = AsyncHandler(async(req, res)=>{
 export const indexShowSavedPin = AsyncHandler(async(req, res)=>{
     const urlSavedPinTitle = req.params.pinTitle;
     const user = await User.findOne({
-        username: req.session.passport.user
+        // username: req.session.passport.user
+        username: req.user.username || req.user.displayName.replaceAll(" ","")
     })
     const userPostsFromSavedPin = await UserSavedPin.findOne({
         $and:[{userSavedPinTitle: urlSavedPinTitle}, {userSavedPin: user._id}]
@@ -80,13 +90,16 @@ export const indexShowPostInfo = AsyncHandler( async(req, res)=>{
     const postId = req.params.postId;
     const post = await Post.findById(postId).populate("user");
     const savedPinList = await User.findOne({
-        username: req.session.passport.user
+        // username: req.session.passport.user
+        username: req.user.username || req.user.displayName.replaceAll(" ","")
     }).populate("savedPin");
     const savePostAlert = req.flash("savePostAlert");
     if(savedPinList._id.toString() === post.user._id.toString()){
         res.render("postInfo", {title: 'Show Pins', postInfo: post,  savedPinList: savedPinList || "" ,savePostAlert:savePostAlert || "", showSaveIcon: false, btnName: "Save"  } );
     }else{
-        const exist = await UserSavedPin.findOne({userSavedPostPin: post._id});
+        const exist = await UserSavedPin.findOne({
+            $and:[{userSavedPostPin: post._id}, {userSavedPin: savedPinList._id}]
+        });
         if(exist){
             res.render("postInfo", {title: 'Show Pins', postInfo: post,  savedPinList: savedPinList || "" ,savePostAlert:savePostAlert || "", showSaveIcon: true, btnName: "Saved" } );
         }else{
