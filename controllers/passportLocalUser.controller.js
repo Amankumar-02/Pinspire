@@ -24,14 +24,14 @@ export const localRegisterUser = AsyncHandler(async (req, res)=>{
     User.register(userData, req.body.password)
     .then(()=>{
       passport.authenticate("local")(req, res, ()=>{
-        res.redirect("/profile");
+        res.redirect("/feed");
       });
     });
   });
 
 // local login route
 export const localLoginUser = AsyncHandler(passport.authenticate("local", {
-    successRedirect:"/profile",
+    successRedirect:"/feed",
     failureRedirect:"/",
     failureFlash:true,
   }), (req, res)=>{

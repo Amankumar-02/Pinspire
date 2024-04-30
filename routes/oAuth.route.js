@@ -28,7 +28,7 @@ oAuthRouter.get("/protected", (req, res, next)=>{
       dp: req.user.photos[0].value || "",
     });
   }
-  res.redirect("/profile")
+  res.redirect("/feed")
 });
 
 
