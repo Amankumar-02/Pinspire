@@ -46,6 +46,11 @@ export const indexSavedPins = AsyncHandler( async(req, res)=>{
 // feed dashboard
 export const indexFeed = AsyncHandler( async(req, res)=>{
     const allPosts = await Post.find().populate("user");
+    // Fisher-Yates shuffle algorithm
+    for (let i = allPosts.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [allPosts[i], allPosts[j]] = [allPosts[j], allPosts[i]];
+    }
     res.render("feed", {allPosts: allPosts});
 });
 
