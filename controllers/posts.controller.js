@@ -127,3 +127,69 @@ export const savedPostPin = AsyncHandler(async(req, res)=>{
     req.flash("savePostAlert", "Post is saved successfully");
     return res.redirect(`/show/postinfo/${post._id}`);
 });
+
+// delete post
+export const deletePost = AsyncHandler(async (req, res) => {
+    const postId = req.params.postId;
+    // delete post from post model
+    const deletedPost = await Post.findByIdAndDelete(postId);
+    fs.unlink(`./public/images/uploads/${deletedPost.image}`, (err)=>{
+        if(err) console.error(err);
+        console.log("Failed post image removed")
+    });
+    // delete post from user model
+    await User.findOneAndUpdate(
+        {
+            username: req.user.username || req.user.displayName.replaceAll(" ", "")
+        },
+        { $pull: { posts: postId } },
+        { new: true }
+    );
+    // delete post from user pin model
+    const userPin = await UserPin.findOneAndUpdate(
+        {
+            userPostPin: postId
+        }, 
+        { $pull: { userPostPin: postId }},
+        { new: true }
+    ).populate("userPostPin");
+    if(deletedPost.image === userPin.pinCover){
+        await UserPin.findByIdAndUpdate( userPin._id,
+            { $set: { pinCover: userPin?.userPostPin[0]?.image }},
+            { new: true }
+        );
+    }
+    if(userPin.userPostPin.length <= 0){
+        const userData = await UserPin.findByIdAndDelete(userPin._id);
+        await User.findByIdAndUpdate(userData.userPin, 
+            { $pull: {pins: userData._id} },
+            { new:true }
+        );
+    }
+    // delete post from otheruser pin model
+    const userSavedPins = await UserSavedPin.find({ userSavedPostPin: postId });
+    if(userSavedPins){
+        for (const userSavedPin of userSavedPins) {
+            const savedPin = await UserSavedPin.findByIdAndUpdate(
+                userSavedPin._id,
+                { $pull: { userSavedPostPin: postId } },
+                { new: true }
+            ).populate("userSavedPostPin");
+            if(deletedPost.image === savedPin.savedPinCover){
+                await UserSavedPin.findByIdAndUpdate(
+                    savedPin._id,
+                    { $set: { savedPinCover:savedPin?.userSavedPostPin[0]?.image } },
+                    { new: true }
+                );
+            }
+            if(savedPin.userSavedPostPin.length <= 0){
+                const userData = await UserSavedPin.findByIdAndDelete(userSavedPin._id);
+                await User.findByIdAndUpdate(userData.userSavedPin, 
+                    { $pull: {savedPin: userData._id} },
+                    { new:true }
+                );
+            }
+        }
+    }
+    res.redirect("/profile");
+});

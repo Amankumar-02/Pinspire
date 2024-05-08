@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { localRegisterUser, localLoginUser, localLogoutUser } from '../controllers/passportLocalUser.controller.js';
 import { indexLogin, indexRegister, indexProfile, indexSavedPins, indexFeed, indexAddPost, indexShowPin, indexShowSavedPin, indexShowPostInfo } from '../controllers/index.controller.js';
 import {updateProfileImage} from '../controllers/users.controller.js';
-import {uploadPost, savedPostPin} from '../controllers/posts.controller.js';
+import {uploadPost, savedPostPin, deletePost} from '../controllers/posts.controller.js';
 import { isLoggedIn, isLoggedOut } from '../passportConfig.js';
 import {upload, upload2} from '../middlewares/multer.middlerware.js';
 
@@ -40,6 +40,7 @@ indexRouter.post("/updateProfileImg", isLoggedIn, upload2.single('profileImg'), 
 // post controller
 indexRouter.post("/upload", isLoggedIn, upload.single('file'), uploadPost);
 indexRouter.post("/savepost/:savePostId", isLoggedIn, savedPostPin);
+indexRouter.get("/remove/:postId", isLoggedIn, deletePost);
 
 
 
