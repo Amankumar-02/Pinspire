@@ -106,7 +106,7 @@ export const indexShowPostInfo = AsyncHandler( async(req, res)=>{
             $and:[{userSavedPostPin: post._id}, {userSavedPin: savedPinList._id}]
         });
         if(exist){
-            res.render("postInfo", {title: 'Show Pins', postInfo: post,  savedPinList: savedPinList || "" ,savePostAlert:savePostAlert || "", showSaveIcon: true, btnName: "Saved" } );
+            res.render("postInfo", {title: 'Show Pins', postInfo: post,  savedPinList: savedPinList || "" ,savePostAlert:savePostAlert || "", showSaveIcon: true, btnName: "Unsave" } );
         }else{
             res.render("postInfo", {title: 'Show Pins', postInfo: post,  savedPinList: savedPinList || "" ,savePostAlert:savePostAlert || "", showSaveIcon: true, btnName: "Save" } );
         }

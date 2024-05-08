@@ -293,6 +293,13 @@
         document.getElementById('saveButton').style.display = 'none';
         document.getElementById('saveForm').style.display = 'block';
       });
+    }else if(saveButton.innerText === "Unsave"){
+      document.getElementById('saveButton').addEventListener('click', function (e) {
+        e.preventDefault();
+        // document.getElementById("saveButton").href = "https://www.google.com";
+        window.location.href = "/unsave/<%= postInfo._id %>";
+        console.log("working")
+      });
     }
   </script>
 </body>

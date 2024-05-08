@@ -193,3 +193,37 @@ export const deletePost = AsyncHandler(async (req, res) => {
     }
     res.redirect("/profile");
 });
+
+
+// unsave post 
+export const unsavePost = AsyncHandler(async(req, res)=>{
+    const postId = req.params.postId;
+    const postData = await Post.findById(postId);
+    const user = await User.findOne({
+        // username: req.session.passport.user
+        username: req.user.username || req.user.displayName.replaceAll(" ","")
+    });
+    // unsave saved post
+    const savedPosts = await UserSavedPin.findOneAndUpdate({ 
+        $and: [{userSavedPin: user._id}, {userSavedPostPin: postId}]
+     }, {
+        $pull: {userSavedPostPin: postId}
+     },{
+        new:true
+     }).populate("userSavedPostPin");
+     if(postData.image === savedPosts.savedPinCover){
+        await UserSavedPin.findByIdAndUpdate(
+            savedPosts._id,
+            { $set: { savedPinCover:savedPosts?.userSavedPostPin[0]?.image } },
+            { new: true }
+        );
+    };
+    if (savedPosts.userSavedPostPin.length <= 0) {
+        const userData = await UserSavedPin.findByIdAndDelete(savedPosts._id);
+        await User.findByIdAndUpdate(savedPosts.userSavedPin,
+            { $pull: { savedPin: userData._id } },
+            { new: true }
+        );
+    }
+    res.redirect("/savePins")
+});
