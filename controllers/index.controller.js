@@ -31,7 +31,7 @@ export const indexProfile = AsyncHandler( async(req, res)=>{
     res.render("profile", { title: 'Pinterest Profile', userDets: userDets || "", imgFormat: true})
 });
 
-// profile dashboard
+// profile save dashboard
 export const indexSavedPins = AsyncHandler( async(req, res)=>{
     const userSavedDets = await User.findOne({
         // username: req.session.passport.user
@@ -41,6 +41,24 @@ export const indexSavedPins = AsyncHandler( async(req, res)=>{
         res.render("profileSavePins", { title: 'Pinterest Profile', userDets: userSavedDets || "", imgFormat: false})
     }
     res.render("profileSavePins", { title: 'Pinterest Profile', userDets: userSavedDets || "", imgFormat: true})
+});
+
+// other users profile dashboard
+export const indexProfilePost = AsyncHandler( async(req, res)=>{
+    const {userInfo} = req.body;
+    const userDets = await User.findOne({
+        username: userInfo
+    }).populate("pins");
+    const userDets2 = await User.findOne({
+        username: userInfo
+    }).populate("savedPin");
+    if(!(userDets && userDets2)){
+        res.redirect("/feed")
+    }
+    if(userDets.dp.includes("http")){
+        res.render("profileSearch", { title: 'Pinterest Profile', userDets: userDets || "", userDets2: userDets2 || "", imgFormat: false})
+    }
+    res.render("profileSearch", { title: 'Pinterest Profile', userDets: userDets || "", userDets2: userDets2 || "", imgFormat: true})
 });
 
 // feed dashboard
