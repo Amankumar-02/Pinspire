@@ -27,7 +27,7 @@
           <div class="cards d-flex flex-wrap gap-2">
             <% userDets.pins.forEach(pin=>{ %>
               <div class="card" style="width: 16.6rem;">
-                <a href="/show/pin/<%= pin.userPinTitle %>">
+                <a href="/show/pin/<%= pin._id %>">
                 <img src="/images/uploads/<%= pin.pinCover %>" class="card-img-top object-fit-cover " style="height: 150px;" alt="...">
               </a>
                 <div class="card-body">

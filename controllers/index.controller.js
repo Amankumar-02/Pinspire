@@ -44,21 +44,37 @@ export const indexSavedPins = AsyncHandler( async(req, res)=>{
 });
 
 // other users profile dashboard
-export const indexProfilePost = AsyncHandler( async(req, res)=>{
+export const indexProfileOthers = AsyncHandler( async(req, res)=>{
     const {userInfo} = req.body;
-    const userDets = await User.findOne({
-        username: userInfo
-    }).populate("pins");
-    const userDets2 = await User.findOne({
-        username: userInfo
-    }).populate("savedPin");
-    if(!(userDets && userDets2)){
+    const searchUsers = await User.findOne({ username: new RegExp(`${userInfo}`, "i") }).populate("pins");
+    console.log(searchUsers)
+    const searchPosts = await Post.findOne({ postText: new RegExp(`${userInfo}`, "i") }).populate("user");
+    if(!(searchUsers || searchPosts)){
         res.redirect("/feed")
     }
-    if(userDets.dp.includes("http")){
-        res.render("profileSearch", { title: 'Pinterest Profile', userDets: userDets || "", userDets2: userDets2 || "", imgFormat: false})
+    if(searchUsers){
+        const searchUsers2 = await User.findOne({ username: new RegExp(`${userInfo}`, "i") }).populate("savedPin");
+        if(searchUsers.dp.includes("http")){
+            res.render("profileSearch", { title: 'Pinterest Profile', userDets: searchUsers || "", userDets2: searchUsers2 || "", imgFormat: false})
+        }
+        res.render("profileSearch", { title: 'Pinterest Profile', userDets: searchUsers || "", userDets2: searchUsers2 || "", imgFormat: true})
+    }else if(searchPosts){
+        const savedPinList = await User.findOne({
+            username: req.user.username || req.user.displayName.replaceAll(" ","")
+        }).populate("savedPin");
+        if(savedPinList._id.toString() === searchPosts.user._id.toString()){
+            res.render("postInfo", {title: 'Show Pins', postInfo: searchPosts,  savedPinList: savedPinList || "" ,savePostAlert:"", showSaveIcon: false, btnName: "Save"  } );
+        }else{
+            const exist = await UserSavedPin.findOne({
+                $and:[{userSavedPostPin: searchPosts._id}, {userSavedPin: savedPinList._id}]
+            });
+            if(exist){
+                res.render("postInfo", {title: 'Show Pins', postInfo: searchPosts,  savedPinList: savedPinList || "" ,savePostAlert:"", showSaveIcon: true, btnName: "Unsave" } );
+            }else{
+                res.render("postInfo", {title: 'Show Pins', postInfo: searchPosts,  savedPinList: savedPinList || "" ,savePostAlert:"", showSaveIcon: true, btnName: "Save" } );
+            }
+        }
     }
-    res.render("profileSearch", { title: 'Pinterest Profile', userDets: userDets || "", userDets2: userDets2 || "", imgFormat: true})
 });
 
 // feed dashboard
@@ -85,25 +101,27 @@ export const indexAddPost = AsyncHandler( async(req, res)=>{
 // show pins dashboard
 export const indexShowPin = AsyncHandler(async(req, res)=>{
     const urlPinTitle = req.params.pinTitle;
-    const user = await User.findOne({
-        // username: req.session.passport.user
-        username: req.user.username || req.user.displayName.replaceAll(" ","")
-    })
-    const userPostsFromPin = await UserPin.findOne({
-        $and:[{userPinTitle: urlPinTitle}, {userPin: user._id}]
-    }).populate("userPostPin");
+    // const user = await User.findOne({
+    //     // username: req.session.passport.user
+    //     username: req.user.username || req.user.displayName.replaceAll(" ","")
+    // })
+    // const userPostsFromPin = await UserPin.findOne({
+    //     $and:[{userPinTitle: urlPinTitle}]
+    // }).populate("userPostPin");
+    const userPostsFromPin = await UserPin.findById(urlPinTitle).populate("userPostPin");
     res.render("showPin", { title: 'Show Pins', userPostsFromPin: userPostsFromPin || ""})
 });
 // show saved pins dashboard
 export const indexShowSavedPin = AsyncHandler(async(req, res)=>{
     const urlSavedPinTitle = req.params.pinTitle;
-    const user = await User.findOne({
-        // username: req.session.passport.user
-        username: req.user.username || req.user.displayName.replaceAll(" ","")
-    })
-    const userPostsFromSavedPin = await UserSavedPin.findOne({
-        $and:[{userSavedPinTitle: urlSavedPinTitle}, {userSavedPin: user._id}]
-    }).populate("userSavedPostPin");
+    // const user = await User.findOne({
+    //     // username: req.session.passport.user
+    //     username: req.user.username || req.user.displayName.replaceAll(" ","")
+    // })
+    // const userPostsFromSavedPin = await UserSavedPin.findOne({
+    //     $and:[{userSavedPinTitle: urlSavedPinTitle}, {userSavedPin: user._id}]
+    // }).populate("userSavedPostPin");
+    const userPostsFromSavedPin = await UserSavedPin.findById(urlSavedPinTitle).populate("userSavedPostPin");
     res.render("showSavedPin", { title: 'Show Pins', userPostsFromPin: userPostsFromSavedPin || ""})
 });
 
