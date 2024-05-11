@@ -271,15 +271,33 @@
         <% } %>
       </div>
       <div>
-        <h2><%= postInfo.postText %><span class="opacity-50 " style="font-size: 12px;"> - @<%= postInfo.user.username %></span>
-        </h2>
-        <p class="opacity-75" style="font-size: 14px;"><i class="ri-check-double-line text-info"></i> <%= postInfo.description %>
-        </p>
+        <div>
+          <h2><%= postInfo.postText %><span class="opacity-50 " style="font-size: 12px;"> - @<%= postInfo.user.username %></span>
+          </h2>
+          <p class="opacity-75" style="font-size: 14px;"><i class="ri-check-double-line text-info"></i> <%= postInfo.description %>
+          </p>
+        </div>
+        <form id="editForm" action="/edit/<%= postInfo._id %>" method="post" style="display: none;">
+          <p class="mb-0 ps-2">Edit</p>
+          <input type="text" class="inputBox" name="postNewTitle" value="<%= postInfo.postText %>" placeholder="New Title"
+            required />
+          <textarea type="text" class="inputBox" name="postNewDesc" value="<%= postInfo.description %>" placeholder="New Description"
+            required ><%= postInfo.description %></textarea>
+            <div class="d-flex align-items-center justify-content-end gap-3 ">
+              <input type="submit" class="border-0 rounded-3 px-3 py-2 bg-danger text-white" value="Save">
+              <button id="cancelButton" class="btn bg-info text-white">Cancel</button>
+            </div>
+        </form>
       </div>
       <% if(showSaveIcon===false) { %>
-      <a href="/remove/<%= postInfo._id %>">
-        <button class="btn bg-info text-white">Remove</button>
-      </a>
+        <div class="d-flex gap-3 ">
+          <!-- <a href="/edit/<%= postInfo._id %>"> -->
+            <button id="editButton" class="btn bg-secondary text-white">Edit</button>
+          <!-- </a> -->
+          <a href="/remove/<%= postInfo._id %>">
+            <button id="removeButton" class="btn bg-info text-white">Remove</button>
+          </a>
+        </div>
       <% } %>
     </div>
   </div>
@@ -288,7 +306,9 @@
     crossorigin="anonymous"></script>
   <script>
     let saveButton = document.getElementById('saveButton');
-    if (saveButton.innerText === "Save") {
+    let editButton = document.getElementById('editButton');
+    if(saveButton){
+      if (saveButton.innerText === "Save") {
       document.getElementById('saveButton').addEventListener('click', function () {
         document.getElementById('saveButton').style.display = 'none';
         document.getElementById('saveForm').style.display = 'block';
@@ -298,9 +318,24 @@
         e.preventDefault();
         // document.getElementById("saveButton").href = "https://www.google.com";
         window.location.href = "/unsave/<%= postInfo._id %>";
-        console.log("working")
       });
     }
+    }else if(editButton)
+    {
+        document.getElementById('editButton').addEventListener('click', function () {
+          document.getElementById('removeButton').style.display = 'none';
+          document.getElementById('editButton').style.display = 'none';
+          // document.getElementById('editForm').style.display = 'block';
+          document.getElementById('editForm').style.cssText = 'display: flex;flex-direction: column;width: 100%;gap: 12px;background-color: #383838;padding: 12px 0px;';
+        });
+        let cancelButton = document.getElementById("cancelButton").addEventListener("click", (e)=>{
+          e.preventDefault();
+          document.getElementById('removeButton').style.display = 'inline-block';
+          document.getElementById('editButton').style.display = 'inline-block';
+          document.getElementById('editForm').style.display = 'none';
+        })
+    }
+
   </script>
 </body>
 

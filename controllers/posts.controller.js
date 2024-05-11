@@ -195,6 +195,26 @@ export const deletePost = AsyncHandler(async (req, res) => {
 });
 
 
+// edit post
+export const editPost = AsyncHandler(async (req, res) => {
+    const postId = req.params.postId;
+    const { postNewTitle, postNewDesc } = req.body;
+    const existingPost = await Post.findOne({ postText: postNewTitle });
+    if (existingPost && existingPost._id.toString() !== postId) {
+        req.flash("savePostAlert", "Post title is already taken");
+        return res.redirect(`/show/postinfo/${postId}`);
+    }
+    const currentPost = await Post.findById(postId);
+    if (currentPost.postText !== postNewTitle || currentPost.description !== postNewDesc) {
+        await Post.findByIdAndUpdate(postId, { $set: { description: postNewDesc, postText: postNewTitle } }, { new: true });
+        req.flash("savePostAlert", "Edit successfully");
+    } else {
+        req.flash("savePostAlert", "No changes made");
+    }
+    res.redirect(`/show/postinfo/${postId}`);
+});
+
+
 // unsave post 
 export const unsavePost = AsyncHandler(async(req, res)=>{
     const postId = req.params.postId;

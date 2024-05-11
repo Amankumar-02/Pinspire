@@ -47,7 +47,6 @@ export const indexSavedPins = AsyncHandler( async(req, res)=>{
 export const indexProfileOthers = AsyncHandler( async(req, res)=>{
     const {userInfo} = req.body;
     const searchUsers = await User.findOne({ username: new RegExp(`${userInfo}`, "i") }).populate("pins");
-    console.log(searchUsers)
     const searchPosts = await Post.findOne({ postText: new RegExp(`${userInfo}`, "i") }).populate("user");
     if(!(searchUsers || searchPosts)){
         res.redirect("/feed")
