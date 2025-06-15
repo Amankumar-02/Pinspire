@@ -5,6 +5,8 @@ import {AsyncHandler} from '../utils/AsyncHandler.js';
 import {ApiResponse} from '../utils/ApiResponse.js';
 import {ApiError} from '../utils/ApiError.js'
 import fs from 'fs';
+import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcrypt';
 
 export const createUser = AsyncHandler(async(req, res)=>{
     // const {username, email, fullname, password, dp} = req.body;
@@ -22,6 +24,23 @@ export const createUser = AsyncHandler(async(req, res)=>{
     }else{
         return res.status(200).json(new ApiResponse(200, exist, "New User Created"));
     }
+});
+export const guestUser = AsyncHandler(async(req, res)=>{
+    const randomId = uuidv4().split('-')[0];
+    const newUser = await User.create({
+        username: `guest_${randomId}`,
+        email: `Guest ${randomId}@gmail.com`,
+        fullname: `guest${randomId}`,
+        password: await bcrypt.hash(`guestpass${randomId}`, 10),
+        posts:[],
+        pins:[],
+        savedPin:[],
+        dp:"",
+    });
+    req.login(newUser, function(err) {
+        if (err) return next(err);
+        return res.redirect("/feed");
+    });
 });
 
 export const allUserPost = AsyncHandler(async(req, res)=>{

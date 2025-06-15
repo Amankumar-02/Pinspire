@@ -8,7 +8,7 @@
     <div class="container">
       <div class="content">
         <!--Pinspire logo-->
-        <img src="https://i.pinimg.com/originals/d3/d1/75/d3d175e560ae133f1ed5cd4ec173751a.png" alt="pin logo" class="img1" />
+        <h1 style="color: #E60019; padding: 20px 0px 0px 0px; font-size: 40px;">Pinspire</h1>
         <p class="header">Log In to see more</p>
         <p class="errorText"> <%= loginErrorFlash %> </p>
         <form action="/usersLogin" method="post">
@@ -16,6 +16,9 @@
           <input type="password" placeholder="Password" class="detail" name="password"/>
           <input type="submit" class="btn int" value="Log In"></input>
         </form>
+        <form action="/guestuser" method="get" style="display: inline;">
+  <button type="submit" class="btn int">Guest Login</button>
+</form>
 
         <h4>Forgot your password?</h4>
 
