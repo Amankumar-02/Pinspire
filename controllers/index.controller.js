@@ -9,13 +9,13 @@ import { UserSavedPin } from '../models/userSavedpin.model.js';
 // login dashboard
 export const indexLogin = AsyncHandler((req, res)=>{
     const [loginErrorFlash] = req.flash("error")
-    res.render('index', { title: 'Pinterest Login', loginErrorFlash: loginErrorFlash || "" });
+    res.render('index', { title: 'Pinspire Login', loginErrorFlash: loginErrorFlash || "" });
 });
 
 // register dashboard
 export const indexRegister = AsyncHandler((req, res)=>{
     const [registerErrorFlash] = req.flash("registerError");
-    res.render('register', { title: 'Pinterest Signup', registerErrorFlash: registerErrorFlash || "" });
+    res.render('register', { title: 'Pinspire Signup', registerErrorFlash: registerErrorFlash || "" });
 });
 
 // profile dashboard
@@ -26,9 +26,9 @@ export const indexProfile = AsyncHandler( async(req, res)=>{
         username: req.user.username || req.user.displayName.replaceAll(" ","")
     }).populate("pins");
     if(userDets.dp.includes("http")){
-        res.render("profile", { title: 'Pinterest Profile', userDets: userDets || "", imgFormat: false})
+        res.render("profile", { title: 'Pinspire Profile', userDets: userDets || "", imgFormat: false})
     }
-    res.render("profile", { title: 'Pinterest Profile', userDets: userDets || "", imgFormat: true})
+    res.render("profile", { title: 'Pinspire Profile', userDets: userDets || "", imgFormat: true})
 });
 
 // profile save dashboard
@@ -38,9 +38,9 @@ export const indexSavedPins = AsyncHandler( async(req, res)=>{
         username: req.user.username || req.user.displayName.replaceAll(" ","")
     }).populate("savedPin");
     if(userSavedDets.dp.includes("http")){
-        res.render("profileSavePins", { title: 'Pinterest Profile', userDets: userSavedDets || "", imgFormat: false})
+        res.render("profileSavePins", { title: 'Pinspire Profile', userDets: userSavedDets || "", imgFormat: false})
     }
-    res.render("profileSavePins", { title: 'Pinterest Profile', userDets: userSavedDets || "", imgFormat: true})
+    res.render("profileSavePins", { title: 'Pinspire Profile', userDets: userSavedDets || "", imgFormat: true})
 });
 
 // other users profile dashboard
@@ -54,9 +54,9 @@ export const indexProfileOthers = AsyncHandler( async(req, res)=>{
     if(searchUsers){
         const searchUsers2 = await User.findOne({ username: new RegExp(`${userInfo}`, "i") }).populate("savedPin");
         if(searchUsers.dp.includes("http")){
-            res.render("profileSearch", { title: 'Pinterest Profile', userDets: searchUsers || "", userDets2: searchUsers2 || "", imgFormat: false})
+            res.render("profileSearch", { title: 'Pinspire Profile', userDets: searchUsers || "", userDets2: searchUsers2 || "", imgFormat: false})
         }
-        res.render("profileSearch", { title: 'Pinterest Profile', userDets: searchUsers || "", userDets2: searchUsers2 || "", imgFormat: true})
+        res.render("profileSearch", { title: 'Pinspire Profile', userDets: searchUsers || "", userDets2: searchUsers2 || "", imgFormat: true})
     }else if(searchPosts){
         const savedPinList = await User.findOne({
             username: req.user.username || req.user.displayName.replaceAll(" ","")
@@ -94,7 +94,7 @@ export const indexAddPost = AsyncHandler( async(req, res)=>{
         // username: req.session.passport.user
         username: req.user.username || req.user.displayName.replaceAll(" ","")
     }).populate("pins");
-    res.render("addPost", {title: 'Pinterest AddPost', postUploadError: postUploadError || "", pinDets: existingPins.pins || "" })
+    res.render("addPost", {title: 'Pinspire AddPost', postUploadError: postUploadError || "", pinDets: existingPins.pins || "" })
 })
 
 // show pins dashboard
